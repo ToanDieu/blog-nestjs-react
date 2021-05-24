@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { AppService } from './app.service';
       username: process.env.DB_USER || 'username',
       password: process.env.DB_PASSWORD || 'password',
       database: process.env.DB_NAME
-    })
+    }),
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
