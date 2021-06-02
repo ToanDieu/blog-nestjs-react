@@ -9,7 +9,8 @@ import { User } from '../models/user.interface';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(UserEntity) private userRepository: Repository<UserEntity>, private authService: AuthService){}
+    constructor(@InjectRepository(UserEntity) private userRepository: Repository<UserEntity>, 
+    private authService: AuthService){}
 
     create(user: User): Observable<User> {
         return this.authService.hashPassword(user.password).pipe(
@@ -19,6 +20,7 @@ export class UserService {
                 newUser.username = user.username;
                 newUser.email = user.email;
                 newUser.password = passwordHash;
+                newUser.role = user.role;
 
                 return from(this.userRepository.save(newUser)).pipe(
                     map((user: User) => {
@@ -91,5 +93,9 @@ export class UserService {
 
     findByMail(email: string): Observable<User> {
         return from(this.userRepository.findOne({email}));
+    }
+
+    updateRoleOfUser(id: number, user: User): Observable<any> {
+        return from(this.userRepository.update(id, user));
     }
 }
